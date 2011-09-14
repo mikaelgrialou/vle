@@ -154,3 +154,50 @@ BOOST_AUTO_TEST_CASE(test_agentonlywakeup)
     BOOST_REQUIRE_EQUAL(value::toInteger(result[1][10]), 2);
 }
 
+BOOST_AUTO_TEST_CASE(test_failedActivity)
+{
+	vpz::Vpz file(utils::Path::path().getExampleFile("failedActivity.vpz"));
+
+    vpz::Output& o(file.project().experiment().views().outputs().get("output"));
+    o.setLocalStream("", "storage", std::string());
+
+    manager::RunQuiet r;
+    r.start(file);
+
+    BOOST_REQUIRE_EQUAL(r.haveError(), false);
+    oov::OutputMatrixViewList& out(r.outputs());
+    BOOST_REQUIRE_EQUAL(out.size(),
+                        (oov::OutputMatrixViewList::size_type)1);
+
+    oov::OutputMatrix& view1(out["output"]);
+
+    value::MatrixView result(view1.values());
+
+    BOOST_REQUIRE_EQUAL(result.shape()[0],
+                        (value::MatrixView::size_type)6);
+    BOOST_REQUIRE_EQUAL(result.shape()[1],
+                        (value::MatrixView::size_type)11);
+
+    BOOST_REQUIRE((value::toString(result[1][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[1][1]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[1][4]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[1][5]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[1][10]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[2][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[2][1]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[2][10]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[3][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[3][1]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[3][10]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[4][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[4][1]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[4][5]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[4][6]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[4][10]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[5][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[5][1]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[5][4]) == "state: started"));
+    BOOST_REQUIRE((value::toString(result[5][5]) == "state: failed"));
+    BOOST_REQUIRE((value::toString(result[5][10]) == "state: failed"));
+}
+

@@ -151,6 +151,11 @@ void Plan::fillActivities(const utils::Block::BlocksResult& acts)
             act.addRule(jt->second, mRules.get(jt->second));
         }
 
+        UB::StringsResult rulesFail = block.strings.equal_range("rules-fail");
+        for (UBS::const_iterator jt = rulesFail.first; jt != rulesFail.second; ++jt) {
+            act.addRuleFailure(jt->second, mRules.get(jt->second));
+        }
+
         UB::StringsResult ack = block.strings.equal_range("ack");
         if (ack.first != ack.second) {
             act.addAcknowledgeFunction((mKb.acknowledgeFunctions().get(

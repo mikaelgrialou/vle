@@ -154,13 +154,24 @@ public:
     void addRule(const std::string& name, const Rule& rule)
     { m_rules.add(name, rule); }
 
+    void addRuleFailure(const std::string& name, const Rule& rule)
+    { m_rulesFailure.add(name, rule); }
+
     Rule& addRule(const std::string& name)
     { return m_rules.add(name, Rule()); }
+
+    Rule& addRuleFailure(const std::string& name)
+    { return m_rulesFailure.add(name, Rule()); }
 
     void setRules(const Rules& rules)
     { m_rules = rules; }
 
+    void setRulesFailure(const Rules& rules)
+    { m_rulesFailure = rules; }
+
     bool validRules() const;
+
+    bool validRulesFailure() const;
 
     //
     // manage time constraint
@@ -209,6 +220,7 @@ public:
     void fail(const devs::Time& date) { m_state = FAILED; doneDate(date); }
 
     const Rules& rules() const { return m_rules; }
+    const Rules& rulesFailure() const { return m_rulesFailure; }
     const DateType& date() const { return m_date; }
     const devs::Time& start() const { return m_start; }
     const devs::Time& finish() const { return m_finish; }
@@ -241,6 +253,7 @@ private:
 
     State m_state;
     Rules m_rules;
+    Rules m_rulesFailure;
 
     bool m_waitall; /**< if true, all FF relationship must be valid, if
                       false, only one can be used. */
@@ -276,7 +289,13 @@ inline std::ostream& operator<<(
 inline std::ostream& operator<<(
     std::ostream& out, const Activity& a)
 {
-    out << a.state() << " " << a.rules() << " Temporal ctr: ";
+	if (a.rulesFailure().size() > 0){
+		 out << a.state() << " (rules:" << a.rules() << "; fail:"
+		            << a.rulesFailure() << ")";
+	} else {
+		 out << a.state() << " rules:" << a.rules();
+	}
+    out << " Temporal ctr: ";
 
     switch (a.date() & (Activity::START | Activity::FINISH | Activity::MINS
                         | Activity::MAXS | Activity::MINF |

@@ -437,13 +437,18 @@ Activities::processWaitState(iterator activity,
     switch (newstate.first) {
     case PrecedenceConstraint::Valid:
     case PrecedenceConstraint::Inapplicable:
-        if (activity->second.validRules()) {
+        if (activity->second.validRulesFailure()) {
+            activity->second.fail(time);
+            m_failedAct.push_back(activity);
+            m_latestFailedAct.push_back(activity);
+            update.first = true;
+        } else if (activity->second.validRules()) {
             activity->second.start(time);
             m_startedAct.push_back(activity);
             m_latestStartedAct.push_back(activity);
             update.first = true;
-            break;
         }
+        break;
     case PrecedenceConstraint::Wait:
         m_waitedAct.push_back(activity);
         update.first = false;
@@ -470,8 +475,15 @@ Activities::processStartedState(iterator activity,
     case PrecedenceConstraint::Valid:
     case PrecedenceConstraint::Inapplicable:
     case PrecedenceConstraint::Wait:
-        m_startedAct.push_back(activity);
-        update.first = false;
+        if (activity->second.validRulesFailure()) {
+            activity->second.fail(time);
+            m_failedAct.push_back(activity);
+            m_latestFailedAct.push_back(activity);
+            update.first = true;
+        } else {
+            m_startedAct.push_back(activity);
+            update.first = false;
+        }
         break;
     case PrecedenceConstraint::Failed:
         activity->second.fail(time);
@@ -494,14 +506,28 @@ Activities::processFFState(iterator activity,
     switch (newstate.first) {
     case PrecedenceConstraint::Valid:
     case PrecedenceConstraint::Inapplicable:
-        activity->second.end(time);
-        m_endedAct.push_back(activity);
-        m_latestEndedAct.push_back(activity);
-        update.first = true;
+        if (activity->second.validRulesFailure()) {
+            activity->second.fail(time);
+            m_failedAct.push_back(activity);
+            m_latestFailedAct.push_back(activity);
+            update.first = true;
+        } else {
+            activity->second.end(time);
+            m_endedAct.push_back(activity);
+            m_latestEndedAct.push_back(activity);
+            update.first = true;
+        }
         break;
     case PrecedenceConstraint::Wait:
-        m_ffAct.push_back(activity);
-        update.first = false;
+        if (activity->second.validRulesFailure()) {
+            activity->second.fail(time);
+            m_failedAct.push_back(activity);
+            m_latestFailedAct.push_back(activity);
+            update.first = true;
+        } else {
+            m_ffAct.push_back(activity);
+            update.first = false;
+        }
         break;
     case PrecedenceConstraint::Failed:
         activity->second.fail(time);

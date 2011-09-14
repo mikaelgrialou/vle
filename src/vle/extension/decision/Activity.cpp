@@ -41,6 +41,14 @@ bool Activity::validRules() const
     }
     return true;
 }
+bool Activity::validRulesFailure() const
+{
+    if (not m_rulesFailure.empty()) {
+        Rules::result_t result = m_rulesFailure.apply();
+        return not result.empty();
+    }
+    return false;
+}
 
 void Activity::initStartTimeFinishTime(const devs::Time& start,
                                        const devs::Time& finish)

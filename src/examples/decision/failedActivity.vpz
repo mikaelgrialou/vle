@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE vle_project PUBLIC "-//VLE TEAM//DTD Strict//EN" "http://www.vle-project.org/vle-1.0.0.dtd">
+<vle_project version="1.0.0" date="mar., 12 janv. 2010" author="Ronan Trépos">
+<structures>
+<model name="failedActiviy" type="coupled" x="0" y="0" width="950" height="400"  >
+<out>
+ <port name="fact" />
+</out>
+<submodels>
+<model name="Ack" type="atomic" conditions="condAck" dynamics="dynAck" x="33" y="298" width="100" height="45" >
+<out>
+ <port name="ack" />
+</out>
+</model>
+<model name="Agent1" type="atomic" dynamics="dynAgent1" observables="oAgentOneAct" x="231" y="24" width="100" height="45" >
+<in>
+ <port name="fact" />
+</in>
+</model>
+<model name="Agent2" type="atomic" dynamics="dynAgent2" observables="oAgentOneAct" x="232" y="114" width="100" height="45" >
+<in>
+ <port name="fact" />
+</in>
+</model>
+<model name="Agent3" type="atomic" dynamics="dynAgent3" observables="oAgentOneAct" x="239" y="192" width="100" height="45" >
+<in>
+ <port name="fact" />
+</in>
+</model>
+<model name="Agent4" type="atomic" dynamics="dynAgent4" observables="oAgentTwoAct" x="240" y="300" width="100" height="60" >
+<in>
+ <port name="ack" />
+ <port name="fact" />
+</in>
+</model>
+<model name="Facts" type="atomic" dynamics="dynFacts" observables="oFacts" x="27" y="97" width="100" height="45" >
+<out>
+ <port name="fact" />
+</out>
+</model>
+</submodels>
+<connections>
+<connection type="internal">
+ <origin model="Ack" port="ack" />
+ <destination model="Agent4" port="ack" />
+</connection>
+<connection type="internal">
+ <origin model="Facts" port="fact" />
+ <destination model="Agent3" port="fact" />
+</connection>
+<connection type="internal">
+ <origin model="Facts" port="fact" />
+ <destination model="Agent1" port="fact" />
+</connection>
+<connection type="internal">
+ <origin model="Facts" port="fact" />
+ <destination model="Agent2" port="fact" />
+</connection>
+<connection type="internal">
+ <origin model="Facts" port="fact" />
+ <destination model="Agent4" port="fact" />
+</connection>
+</connections>
+</model>
+</structures>
+<dynamics>
+<dynamic name="dynAck" library="decision" model="Ack" type="local"  />
+<dynamic name="dynAgent1" library="decision" model="Agent1" type="local"  />
+<dynamic name="dynAgent2" library="decision" model="Agent2" type="local"  />
+<dynamic name="dynAgent3" library="decision" model="Agent3" type="local"  />
+<dynamic name="dynAgent4" library="decision" model="Agent4" type="local"  />
+<dynamic name="dynFacts" library="decision" model="Facts" type="local"  />
+</dynamics>
+<experiment name="failedActivity" duration="10.000000000000000" begin="0.000000000000000" combination="linear" seed="10" >
+<replicas seed="581869302" number="10" />
+<conditions>
+<condition name="condAck" >
+ <port name="activity" >
+<string>B</string>
+</port>
+ <port name="timeOfSend" >
+<double>5.000000000000000</double>
+</port>
+</condition>
+<condition name="condAck_1" >
+ <port name="activity" >
+<string>B</string>
+</port>
+ <port name="timeOfSend" >
+<double>18.000000000000000</double>
+</port>
+</condition>
+</conditions>
+<views>
+<outputs>
+<output name="output" location="" format="local" plugin="file" >
+<map><key name="output"><string>out</string></key></map></output>
+
+</outputs>
+<observables>
+<observable name="oAgentOneAct" >
+<port name="A" >
+ <attachedview name="output" />
+</port>
+
+</observable>
+
+<observable name="oAgentTwoAct" >
+<port name="A" >
+ <attachedview name="output" />
+</port>
+
+<port name="B" >
+ <attachedview name="output" />
+</port>
+
+</observable>
+
+<observable name="oFacts" />
+
+</observables>
+<view name="output" output="output" type="timed" timestep="1.000000000000000" />
+
+</views>
+</experiment>
+</vle_project>
