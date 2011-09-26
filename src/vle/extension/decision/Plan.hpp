@@ -61,6 +61,19 @@ public:
 
     void fill(std::istream& stream);
 
+    /**
+     * @brief If required, adds to the plan a new activity after the change
+     * of state of the source activity. Parameters of recursion are
+     * stored in the parameters of the __internal map of the source activity.
+     * @param name, the name of the source activity
+     * @param act, the source activity
+     * @param date, the date of the "done" acknowledge of act.
+     */
+    void manageRecursion(const std::string& name,
+                         const Activity& act,
+                         const devs::Time& date);
+
+
     const Rules& rules() const { return mRules; }
     const Activities& activities() const { return mActivities; }
     Rules& rules() { return mRules; }
@@ -70,9 +83,14 @@ private:
     void fill(const utils::Block& root);
     void fillRules(const utils::Block::BlocksResult& rules);
     void fillActivities(const utils::Block::BlocksResult& activities);
+    void fillActivitiesSequence(const utils::Block::BlocksResult& seqActivities);
     void fillTemporal(const utils::Block::BlocksResult& temporals,
                       Activity& activity);
+    void fillTemporalSequence(const utils::Block::BlocksResult& temporals,
+                      Activity& activity);
     void fillPrecedences(const utils::Block::BlocksResult& precedences);
+
+
 
     KnowledgeBase& mKb;
     Rules mRules;

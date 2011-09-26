@@ -201,3 +201,46 @@ BOOST_AUTO_TEST_CASE(test_failedActivity)
     BOOST_REQUIRE((value::toString(result[5][10]) == "state: failed"));
 }
 
+
+BOOST_AUTO_TEST_CASE(test_sequenceActivity)
+{
+	vpz::Vpz file(utils::Path::path().getExampleFile("sequenceActivity.vpz"));
+
+    vpz::Output& o(file.project().experiment().views().outputs().get("output"));
+    o.setLocalStream("", "storage", std::string());
+
+    manager::RunQuiet r;
+    r.start(file);
+
+    BOOST_REQUIRE_EQUAL(r.haveError(), false);
+    oov::OutputMatrixViewList& out(r.outputs());
+    BOOST_REQUIRE_EQUAL(out.size(),
+                        (oov::OutputMatrixViewList::size_type)1);
+
+    oov::OutputMatrix& view1(out["output"]);
+
+    value::MatrixView result(view1.values());
+
+    BOOST_REQUIRE_EQUAL(result.shape()[0],
+                        (value::MatrixView::size_type)5);
+    BOOST_REQUIRE_EQUAL(result.shape()[1],
+                        (value::MatrixView::size_type)11);
+    BOOST_REQUIRE((value::toString(result[1][0]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[1][1]) == "state: done"));
+    BOOST_REQUIRE((value::toString(result[1][10]) == "state: done"));
+    BOOST_REQUIRE((result[2][0] == 0));
+    BOOST_REQUIRE((value::toString(result[2][1]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[2][2]) == "state: done"));
+    BOOST_REQUIRE((value::toString(result[2][10]) == "state: done"));
+    BOOST_REQUIRE((result[3][0] == 0));
+    BOOST_REQUIRE((result[3][1] == 0));
+    BOOST_REQUIRE((value::toString(result[3][2]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[3][3]) == "state: done"));
+    BOOST_REQUIRE((value::toString(result[3][10]) == "state: done"));
+    BOOST_REQUIRE((result[4][0] == 0));
+    BOOST_REQUIRE((result[4][2] == 0));
+    BOOST_REQUIRE((value::toString(result[4][3]) == "state: wait"));
+    BOOST_REQUIRE((value::toString(result[4][4]) == "state: done"));
+    BOOST_REQUIRE((value::toString(result[4][10]) == "state: done"));
+}
+

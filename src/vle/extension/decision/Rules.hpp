@@ -50,6 +50,16 @@ public:
 
     Rule& add(const std::string& name, const Predicate& pred);
 
+    /**
+     * @brief Returns true if the rule exists, false otherwise
+     * @param name the name of a rule
+     * @return true if the rule exists, false otherwise
+     */
+    bool exist(const std::string& name) const
+    {
+        return (m_lst.find(name) != m_lst.end());
+    }
+
     result_t apply() const;
 
     const Rule& get(const std::string& name) const;

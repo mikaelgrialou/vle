@@ -138,7 +138,8 @@ void Agent::externalTransition(
                 setActivityFailed(activity, time);
             } else {
                 throw utils::ModellingError(
-                    fmt(_("Decision: unknown order `%1%'")) % order);
+                    fmt(_("[%1%] Decision: unknown order `%1%'"))
+                    % getModelName() % order);
             }
         } else {
             value::Map::const_iterator jt = atts.value().find("value");
@@ -148,8 +149,8 @@ void Agent::externalTransition(
 
             if (jt == atts.end() or not jt->second) {
                 throw utils::ModellingError(
-                    fmt(_("Decision: no value in this message: `%1%'")) %
-                    (*it));
+                    fmt(_("[%1%] Decision: no value in this message: '%1%' "
+                       "on port '%2%'")) % getModelName() % (*it) % port);
             }
 
             if (mPortMode) {
@@ -183,7 +184,6 @@ value::Value* Agent::observation(
     const devs::ObservationEvent& event) const
 {
     const std::string port = event.getPortName();
-
     if (port == "KnowledgeBase") {
         std::stringstream out;
         out << *this;
@@ -192,16 +192,20 @@ value::Value* Agent::observation(
         std::stringstream out;
         out << activities();
         return new value::String(out.str());
-    } else if (port.compare(0, 9, "Activity_") and port.size() > 9) {
-        std::string activity(port, 10, std::string::npos);
-        const Activity& act(activities().get(activity)->second);
-        std::stringstream out;
-        out << act.state();
-        return new value::String(out.str());
-    } else if (port.compare(0, 6, "Rules_") and port.size() > 6) {
-        std::string rule(port, 7, std::string::npos);
-        const Rule& ru(rules().get(rule));
-        return new value::Boolean(ru.isAvailable());
+    } else if ((port.compare(0, 9, "Activity_") == 0) and port.size() > 9) {
+        std::string activity(port, 9, std::string::npos);
+        if(activities().exist(activity)){
+            const Activity& act(activities().get(activity)->second);
+            std::stringstream out;
+            out << act.state();
+            return new value::String(out.str());
+        }
+    } else if ((port.compare(0, 6, "Rules_") == 0) and port.size() > 6) {
+        std::string rule(port, 6, std::string::npos);
+        if(rules().exist(rule)){
+            const Rule& ru(rules().get(rule));
+            return new value::Boolean(ru.isAvailable());
+        }
     }
     return 0;
 }

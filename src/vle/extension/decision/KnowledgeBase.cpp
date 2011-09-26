@@ -28,8 +28,12 @@
 
 #include <vle/extension/decision/KnowledgeBase.hpp>
 #include <vle/utils/i18n.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <cassert>
+#include <sstream>
 
 namespace vle { namespace extension { namespace decision {
 
@@ -37,15 +41,18 @@ void KnowledgeBase::setActivityDone(const std::string& name,
                                     const devs::Time& date)
 {
     Activities::iterator it(mPlan.activities().get(name));
+    Activity& act = it->second;
 
-    if (not it->second.isInStartedState()) {
-        throw utils::ArgError(fmt(
-                _("Decision: activity '%1%' is not started")) % name);
+    if (not it->second.isInFailedState()) {
+        if (not act.isInStartedState()) {
+            throw utils::ArgError(fmt(
+              _("Decision: activity '%1%' is not started")) % name);
+        }
+        mPlan.activities().setFFAct(it);
+        act.ff(date);
+        mPlan.manageRecursion(name,act,date);
+        act.acknowledge(name);
     }
-
-    mPlan.activities().setFFAct(it);
-    it->second.ff(date);
-    it->second.acknowledge(name);
 }
 
 void KnowledgeBase::setActivityFailed(const std::string& name,

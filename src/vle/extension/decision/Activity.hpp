@@ -95,7 +95,26 @@ public:
         m_maxfinish(devs::Time::infinity),
         m_started(devs::Time::negativeInfinity),
         m_ff(devs::Time::negativeInfinity),
-        m_done(devs::Time::negativeInfinity)
+        m_done(devs::Time::negativeInfinity),
+        mParams()
+    {}
+
+    Activity(const Activity& act)
+        : m_state(WAIT), m_rules(act.m_rules),
+          m_rulesFailure(act.m_rulesFailure), m_waitall(true),
+          m_date((Activity::DateType)(Activity::START | Activity::FINISH)),
+          m_start(devs::Time::negativeInfinity),
+          m_finish(devs::Time::infinity),
+          m_minstart(devs::Time::negativeInfinity),
+          m_maxstart(devs::Time::negativeInfinity),
+          m_minfinish(devs::Time::infinity),
+          m_maxfinish(devs::Time::infinity),
+          m_started(devs::Time::negativeInfinity),
+          m_ff(devs::Time::negativeInfinity),
+          m_done(devs::Time::negativeInfinity),
+          mAckFct(act.mAckFct), mOutFct(act.mOutFct),
+          mUpdateFct(act.mUpdateFct),
+          mParams(act.mParams)
     {}
 
     //
@@ -233,6 +252,10 @@ public:
     const devs::Time& doneDate() const { return m_done; }
     const devs::Time& ffDate() const { return m_ff; }
 
+    const value::Map& parameters() const {return mParams;}
+    value::Map& parameters() {return mParams;}
+
+
     bool waitAllFsBeforeStart() const { return m_waitall; }
     bool waitOnlyOneFsBeforeStart() const { return not m_waitall; }
     void waitAllFs() { m_waitall = true; }
@@ -274,6 +297,8 @@ private:
     AckFct mAckFct;
     OutFct mOutFct;
     UpdateFct mUpdateFct;
+
+    value::Map mParams; /** Parameters of the activity **/
 };
 
 inline std::ostream& operator<<(

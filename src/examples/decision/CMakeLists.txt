@@ -10,7 +10,8 @@ LINK_DIRECTORIES(
   ${LIBXML_LIBRARY_DIR}
   ${Boost_LIBRARY_DIRS})
 
-SET(SOURCES_CPP Basic.cpp OnlyAgent.cpp SimpleAgent.cpp FailedActivity.cpp)
+SET(SOURCES_CPP Basic.cpp OnlyAgent.cpp SimpleAgent.cpp FailedActivity.cpp
+  SequenceActivity.cpp)
 
 ADD_LIBRARY(decision SHARED ${SOURCES_CPP})
 
@@ -35,7 +36,8 @@ INSTALL(TARGETS decision
   LIBRARY DESTINATION "${VLE_LIBRARY_DIRS}/simulator")
 
 INSTALL(FILES agentonly.vpz agentonlyc.vpz agentonlywakeup.vpz agentsimple.vpz
-  failedActivity.vpz DESTINATION "${VLE_SHARE_DIRS}/examples")
+  failedActivity.vpz sequenceActivity.vpz
+  DESTINATION "${VLE_SHARE_DIRS}/examples")
 
 INSTALL(FILES ${SOURCES_CPP} DESTINATION
   "${VLE_SHARE_DIRS}/examples/sources/decision")
