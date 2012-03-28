@@ -149,10 +149,10 @@ OptionGroup::OptionGroup()
         en.set_short_name('R');
         en.set_description(_(
                 "Switch to remote commands:\n"
-                "\tvle --remote vle-project update\n"
-                "\tvle --remote vle-project search expression\n"
-                "\tvle --remote vle-project install packages ...\n"
-                "\tvle --remote vle-project show package ...\n"));
+                "\tvle --remote update\n"
+                "\tvle --remote search foo\n"
+                "\tvle --remote install foo\n"
+                "\tvle --remote show foo\n"));
         add_entry(en, mRemote);
     }
     {
