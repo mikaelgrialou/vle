@@ -97,52 +97,31 @@ public:
             return;
         }
 
-        xmlBuffer* output = xmlBufferCreate();
-        xmlChar buf[1024];
-        int len;
+        std::ofstream file;
+        std::string filename(utils::Path::getTempFile("vle-remote-", &file));
+        file.close();
 
-        while ((len = xmlNanoHTTPRead(ctxt, buf, sizeof(buf))) > 0) {
-            if(xmlBufferAdd(output, buf, len) != 0) {
-                xmlNanoHTTPClose(ctxt);
-                xmlBufferFree(output);
+        {
+            boost::mutex::scoped_lock lock(mMutex);
+            mFilename.assign(filename);
+        }
 
-                boost::mutex::scoped_lock lock(mMutex);
-                mHasError = true;
-                mErrorMessage = (fmt(
-                        _("Remote access: error during download at bytes %1%"))
-                    % (xmlBufferLength(output))).str();
-                return;
-            }
+        std::cout << " filename=" << filename << " url=" << mUrl << std::endl;
+
+        int resFetch = xmlNanoHTTPFetch(mUrl.c_str(),filename.c_str(),
+                        NULL);
+
+        if(resFetch == -1){
+            mHasError = true;
+            mErrorMessage = (fmt(
+                    _("Remote access: failed to download `%1%'")) %
+                    mUrl).str();
+        } else {
+            mHasError = false;
         }
 
         xmlNanoHTTPClose(ctxt);
-        xmlBufferFree(output);
         xmlNanoHTTPCleanup();
-
-        std::ofstream file;
-        std::string filename(utils::Path::getTempFile("vle-remote-", &file));
-
-        if (not filename.empty() and file.is_open()) {
-            {
-                boost::mutex::scoped_lock lock(mMutex);
-                mFilename.assign(filename);
-            }
-
-            file.write(
-                reinterpret_cast < const char* >(xmlBufferContent(output)),
-                xmlBufferLength(output));
-            xmlNanoHTTPClose(ctxt);
-            xmlBufferFree(output);
-            mHasError = false;
-        } else {
-            xmlNanoHTTPClose(ctxt);
-            xmlBufferFree(output);
-            boost::mutex::scoped_lock lock(mMutex);
-            mHasError = true;
-            mErrorMessage = (fmt(
-                    _("Remote access: failed to store in file `%1%'")) %
-                filename).str();
-        }
     }
 
     boost::mutex mMutex;
