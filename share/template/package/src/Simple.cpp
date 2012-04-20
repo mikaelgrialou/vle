@@ -32,8 +32,9 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <vle/value.hpp>
-#include <vle/devs.hpp>
+#include <vle/devs/Time.hpp>
+#include <vle/value/Value.hpp>
+#include <vle/devs/Dynamics.hpp>
 
 namespace vd = vle::devs;
 namespace vv = vle::value;
@@ -54,7 +55,7 @@ public:
 
     virtual vd::Time init(const vd::Time& /*time*/)
     {
-        return vd::Time::infinity;
+        return vd::infinity;
     }
 
     virtual void output(const vd::Time& /*time*/,
@@ -64,7 +65,7 @@ public:
 
     virtual vd::Time timeAdvance() const
     {
-        return vd::Time::infinity;
+        return vd::infinity;
     }
 
     virtual void internalTransition(const vd::Time& /*time*/)
