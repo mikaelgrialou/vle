@@ -106,8 +106,6 @@ public:
             mFilename.assign(filename);
         }
 
-        std::cout << " filename=" << filename << " url=" << mUrl << std::endl;
-
         int resFetch = xmlNanoHTTPFetch(mUrl.c_str(),filename.c_str(),
                         NULL);
 

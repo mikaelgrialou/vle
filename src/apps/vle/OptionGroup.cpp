@@ -151,6 +151,7 @@ OptionGroup::OptionGroup()
                 "Switch to remote commands:\n"
                 "\tvle --remote update\n"
                 "\tvle --remote search foo\n"
+                "\tvle --remote source foo\n"
                 "\tvle --remote install foo\n"
                 "\tvle --remote show foo\n"));
         add_entry(en, mRemote);

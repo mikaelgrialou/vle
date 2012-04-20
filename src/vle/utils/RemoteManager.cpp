@@ -51,9 +51,9 @@
 
 namespace vle { namespace utils {
 
-static bool isName(const std::string& line)
+static bool isSource(const std::string& line)
 {
-    return boost::algorithm::starts_with(line, "Package:");
+    return boost::algorithm::starts_with(line, "Source:");
 }
 
 static bool isVersion(const std::string& line)
@@ -61,14 +61,39 @@ static bool isVersion(const std::string& line)
     return boost::algorithm::starts_with(line, "Version:");
 }
 
-static bool isDepends(const std::string& line)
+static bool isSection(const std::string& line)
 {
-    return boost::algorithm::starts_with(line, "Depends:");
+    return boost::algorithm::starts_with(line, "Section:");
 }
 
 static bool isMaintainer(const std::string& line)
 {
     return boost::algorithm::starts_with(line, "Maintainer:");
+}
+
+static bool isHomepage(const std::string& line)
+{
+    return boost::algorithm::starts_with(line, "Homepage:");
+}
+
+static bool isUrl(const std::string& line)
+{
+    return boost::algorithm::starts_with(line, "Url:");
+}
+
+static bool isBuildDepends(const std::string& line)
+{
+    return boost::algorithm::starts_with(line, "Build-Depends:");
+}
+
+static bool isDepends(const std::string& line)
+{
+    return boost::algorithm::starts_with(line, "Depends:");
+}
+
+static bool isConflicts(const std::string& line)
+{
+    return boost::algorithm::starts_with(line, "Conflicts:");
 }
 
 static bool isDescription(const std::string& line)
@@ -81,24 +106,196 @@ static bool isEndDescription(const std::string& line)
     return line == " .";
 }
 
-static bool isTags(const std::string& line)
+/**
+ * \c PackageVersion identifier of either a package or vle version
+ *
+ * the version of a package is :
+ *  - the major version number
+ *  - the minor version number
+ *  - the patch number
+ *  - the reopsitory number (for a package) or TODO (for vle)
+ */
+
+struct PackageVersion
 {
-    return boost::algorithm::starts_with(line, "Tags:");
+    PackageVersion():
+        mhasVersionMinor(false), mhasVersionPatch(false),
+        mhasVersionRepository(false), mVersionMajor(0), mVersionMinor(0),
+        mVersionPatch(0), mVersionRepository(0)
+    {
+
+    }
+
+    /**
+     * Fills version
+     *
+     * @param version_id, string representation of the version,
+     *  with format "10", "10.2", "10.2.3" or "10.2.3-4"
+     **/
+    void fill(const std::string& version_id)
+    {
+        using boost::lexical_cast;
+        using boost::numeric_cast;
+
+        std::vector<std::string> splitRes;
+        boost::algorithm::split(splitRes, version_id,
+                                boost::algorithm::is_any_of("-"),
+                                boost::algorithm::token_compress_on);
+
+        if (splitRes.size() != 1 && splitRes.size() != 2){
+            throw utils::ArgError(fmt(_("PackageVersion: bad format '%1%'"))
+                    % version_id);
+        }
+        if (splitRes.size() == 2) {
+            mVersionRepository = numeric_cast < uint32_t >(
+                    lexical_cast < long >(splitRes[1]));
+            mhasVersionRepository = true;
+        } else {
+            mVersionRepository = 0;
+            mhasVersionRepository = false;
+        }
+
+        const std::string& majMinPa = splitRes[0];
+
+        std::vector<std::string> splitRes2;
+        boost::algorithm::split(splitRes2, majMinPa,
+                                boost::algorithm::is_any_of("."),
+                                boost::algorithm::token_compress_on);
+
+        if (splitRes2.size() == 0 ){
+            throw utils::ArgError(fmt(_("PackageVersion: bad format '%1%'"))
+                    % version_id);
+        }
+
+        mVersionMajor = numeric_cast < uint32_t >(
+                lexical_cast < long >(splitRes2[0]));
+
+        if (splitRes2.size() > 1 ){
+            mVersionMinor = numeric_cast < uint32_t >(
+                            lexical_cast < long >(splitRes2[1]));
+            mhasVersionMinor = true;
+            if (splitRes2.size() > 2 ){
+                mVersionPatch = numeric_cast < uint32_t >(
+                        lexical_cast < long >(splitRes2[2]));
+                mhasVersionPatch = true;
+                if(splitRes2.size() > 3 ){
+                    throw utils::ArgError(fmt(_("PackageVersion: bad format "
+                            "'%1%'")) % version_id);
+                }
+            } else {
+                mhasVersionPatch = false;
+            }
+        } else {
+            mhasVersionMinor = false;
+        }
+    }
+    bool mhasVersionMinor;
+    bool mhasVersionPatch;
+    bool mhasVersionRepository;
+    uint32_t mVersionMajor;
+    uint32_t mVersionMinor;
+    uint32_t mVersionPatch;
+    uint32_t mVersionRepository;
+};
+
+/**
+ * \c PackageDepend a dependance to a package or vle.
+ *
+ * A dependance consists in :
+ *  - the name of the package dependance
+ *  - the version targeted
+ *  - a boolean indicating if there should be a compatibilty with
+ *  newer versions
+ */
+struct PackageDepend
+{
+    PackageDepend() :
+        mName(""),mVersion(), mGreaterAccepted(false)
+    {
+
+    }
+    /**
+     * Fills dependance
+     *
+     * @param dep, string dependance representation eg. "weather (>= 1.2.3)"
+     **/
+    void fill(const std::string& dep)
+    {
+        std::vector<std::string> splitRes;
+        boost::algorithm::split(splitRes, dep,
+                                boost::algorithm::is_any_of(" "),
+                                boost::algorithm::token_compress_on);
+
+        if (splitRes.size() != 3) {
+            throw utils::ArgError(fmt(_("PackageDepend: bad format '%1%'"))
+                    % dep);
+        } else {
+            const std::string& name = splitRes[0];
+            if (name.size() < 1){
+                throw utils::ArgError(fmt(_("PackageDepend: bad name format "
+                                        "'%1%'")) % dep);
+            }
+            mName.assign(name);
+            const std::string& greater = splitRes[1];
+            if (greater == "(>="){
+                mGreaterAccepted = true;
+            } else if (greater == "(=") {
+                mGreaterAccepted = false;
+            } else {
+                throw utils::ArgError(fmt(_("PackageDepend: bad comparison "
+                        "format '%1%'")) % dep);
+            }
+            const std::string& version = splitRes[2];
+            if (version.size() < 2){
+                throw utils::ArgError(fmt(_("PackageDepend: bad version "
+                                        "format '%1%'")) % dep);
+            }
+            mVersion.fill(std::string(version,0,version.size()-1));
+        }
+    }
+
+    std::string mName;
+    PackageVersion mVersion;
+    bool mGreaterAccepted;
+
+};
+
+std::ostream& operator<<(std::ostream& os, const PackageDepend& pd)
+{
+    os << pd.mName;
+    if (pd.mGreaterAccepted){
+        os << " (>= ";
+    } else {
+        os << " (= ";
+    }
+    os << pd.mVersion.mVersionMajor ;
+    if (pd.mVersion.mhasVersionMinor) {
+        os << "." << pd.mVersion.mVersionMinor;
+    }
+    if (pd.mVersion.mhasVersionPatch) {
+        os << "." << pd.mVersion.mVersionPatch;
+    }
+    if (pd.mVersion.mhasVersionRepository) {
+        os << "-" << pd.mVersion.mVersionRepository;
+    }
+    os << ")";
+    return os;
 }
 
-static bool isUrl(const std::string& line)
+std::ostream& operator<<(std::ostream& os,
+        const std::vector<PackageDepend>& pds)
 {
-    return boost::algorithm::starts_with(line, "Url:");
-}
+    std::vector<PackageDepend>::const_iterator itb = pds.begin();
+    std::vector<PackageDepend>::const_iterator ite = pds.end();
+    uint32_t stopcomma = pds.size()-1;
 
-static bool isSize(const std::string& line)
-{
-    return boost::algorithm::starts_with(line, "Size:");
-}
-
-static bool isMD5sum(const std::string& line)
-{
-    return boost::algorithm::starts_with(line, "MD5sum:");
+    for(unsigned int i=0; itb!=ite ; itb++, i++){
+        os << (*itb);
+        if(i<stopcomma){
+            os << ", ";
+        }
+    }
+    return os;
 }
 
 /**
@@ -114,66 +311,102 @@ static bool isMD5sum(const std::string& line)
 class RemotePackage
 {
 public:
-    RemotePackage(std::istream& is)
-        : mName(), mMaintainer(), mDescription(), mUrl(), mMD5sum(),
-        mTags(), mDepends(), mVersionMajor(0), mVersionMinor(0),
-        mVersionPatch(0), mSize(0)
+    RemotePackage(std::istream& is, const std::string& url) :
+        mSource(), mVersionMajor(0), mVersionMinor(0), mVersionPatch(0),
+        mVersionRepository(0), mSection("no section"), mMaintainer(""),
+        mHomepage(""), mUrl(url), mBuildDepends(), mDepends(), mConflicts(),
+        mDescription("")
     {
+
+        std::cout << " RemotePackage " << url << std::endl;
+
         try {
             std::string line;
             std::getline(is, line);
 
-            if (isName(line)) {
-                setName(std::string(line, 8));
+            if (isSource(line)) {
+                setSource(std::string(line, 7));
                 std::getline(is, line);
             }
             if (isVersion(line)) {
-                setVersion(std::string(line, 8));
+                setVersion(std::string(line, 9));
                 std::getline(is, line);
             }
-            if (isDepends(line)) {
-                setDepends(std::string(line, 8));
+            if (isSection(line)) {
+                setSection(std::string(line, 8));
                 std::getline(is, line);
             }
             if (isMaintainer(line)) {
                 setMaintainer(std::string(line, 11));
                 std::getline(is, line);
             }
+            if (isHomepage(line)) {
+                setHomepage(std::string(line, 9));
+                std::getline(is, line);
+            }
+            if (isUrl(line)) {
+                setUrl(std::string(line, 5));
+                std::getline(is, line);
+            }
+            if (isBuildDepends(line)) {
+                setBuildDepends(std::string(line, 14));
+                std::getline(is, line);
+            }
+            if (isDepends(line)) {
+                setDepends(std::string(line, 8));
+                std::getline(is, line);
+            }
+            if (isConflicts(line)) {
+                setConflicts(std::string(line, 10));
+                std::getline(is, line);
+            }
             if (isDescription(line)) {
                 setDescription(std::string(line, 12));
-
                 std::getline(is, line);
                 while (is and not isEndDescription(line)) {
                     appendDesciption(line);
                     std::getline(is, line);
                 }
             }
-            if (isTags(line)) {
-                setTags(std::string(line, 5));
-                std::getline(is, line);
-            }
-            if (isUrl(line)) {
-                setUrl(std::string(line, 4));
-                std::getline(is, line);
-            }
-            if (isSize(line)) {
-                setSize(std::string(line, 5));
-                std::getline(is, line);
-            }
-            if (isMD5sum(line)) {
-                setMD5sum(std::string(line, 7));
-            }
         } catch (const std::ios_base::failure& /*e*/) {
         }
     }
 
-    RemotePackage(const RemotePackage& other)
-        : mName(other.mName), mMaintainer(other.mMaintainer),
-        mDescription(other.mDescription), mUrl(other.mUrl),
-        mMD5sum(other.mMD5sum), mTags(other.mTags), mDepends(other.mDepends),
-        mVersionMajor(other.mVersionMajor), mVersionMinor(other.mVersionMinor),
-        mVersionPatch(other.mVersionPatch), mSize(other.mSize)
+    RemotePackage(const RemotePackage& other) :
+        mSource(other.mSource), mVersionMajor(other.mVersionMajor),
+        mVersionMinor(other.mVersionMinor), mVersionPatch(other.mVersionPatch),
+        mVersionRepository(other.mVersionRepository), mSection(other.mSection),
+        mMaintainer(other.mMaintainer), mHomepage(other.mHomepage),
+        mUrl(other.mUrl), mBuildDepends(), mDepends(), mConflicts(),
+        mDescription(other.mDescription)
     {
+        {
+            std::vector<PackageDepend>::const_iterator itb =
+                    other.mBuildDepends.begin();
+            std::vector<PackageDepend>::const_iterator ite =
+                    other.mBuildDepends.end();
+            for (;itb!=ite; itb ++){
+                mBuildDepends.push_back((*itb));
+            }
+        }
+        {
+            std::vector<PackageDepend>::const_iterator itb =
+                    other.mDepends.begin();
+            std::vector<PackageDepend>::const_iterator ite =
+                    other.mDepends.end();
+            for (;itb!=ite; itb ++){
+                mDepends.push_back((*itb));
+            }
+        }
+        {
+            std::vector<PackageDepend>::const_iterator itb =
+                    other.mConflicts.begin();
+            std::vector<PackageDepend>::const_iterator ite =
+                    other.mConflicts.end();
+            for (;itb!=ite; itb ++){
+                mConflicts.push_back((*itb));
+            }
+        }
     }
 
     ~RemotePackage()
@@ -189,62 +422,46 @@ public:
 
     void swap(RemotePackage& other)
     {
-        std::swap(mName, other.mName);
+        std::swap(mSource, other.mSource);
         std::swap(mVersionMajor, other.mVersionMajor);
         std::swap(mVersionMinor, other.mVersionMinor);
         std::swap(mVersionPatch, other.mVersionPatch);
-        std::swap(mDepends, other.mDepends);
+        std::swap(mVersionRepository, other.mVersionRepository);
+        std::swap(mSection, other.mSection);
         std::swap(mMaintainer, other.mMaintainer);
+        std::swap(mHomepage, other.mHomepage);
+        std::swap(mBuildDepends, other.mBuildDepends);
+        std::swap(mDepends, other.mDepends);
+        std::swap(mConflicts, other.mConflicts);
         std::swap(mDescription, other.mDescription);
-        std::swap(mTags, other.mTags);
         std::swap(mUrl, other.mUrl);
-        std::swap(mSize, other.mSize);
-        std::swap(mMD5sum, other.mMD5sum);
     }
 
-    void setName(const std::string& name)
+    void setSource(const std::string& name)
     {
         std::string tmp = boost::algorithm::trim_copy(name);
 
         if (tmp.empty()) {
             throw utils::ArgError(fmt(_("RemotePackage: empty name")));
         } else {
-            mName = tmp;
+            mSource = tmp;
         }
     }
 
+    /**
+     * Set version from a string
+     * @param line, string representation of a version e.g "1.2.3"
+     */
     void setVersion(const std::string& line)
     {
-        using boost::lexical_cast;
-        using boost::numeric_cast;
+        PackageVersion pkgver;
+        pkgver.fill(line);
+        mVersionMajor = pkgver.mVersionMajor;
+        mVersionMinor = pkgver.mVersionMinor;
+        mVersionPatch = pkgver.mVersionPatch;
+        mVersionRepository = pkgver.mVersionRepository;
 
-        try {
-            std::string::size_type major = line.find('.');
-            if (major != std::string::npos and line.size() < major) {
-                std::string::size_type minor = line.find('.', major);
-                if (minor != std::string::npos and line.size() < minor) {
-                    long ma, mi, pa;
-
-                    ma = lexical_cast < long >(std::string(line, 0, major));
-                    mi = lexical_cast < long >(std::string(line, major + 1,
-                                                           minor));
-                    pa = lexical_cast < long >(std::string(line, minor + 1));
-
-                    uint32_t uma, umi, mpa;
-
-                    uma = numeric_cast < uint32_t >(ma);
-                    umi = numeric_cast < uint32_t >(mi);
-                    mpa = numeric_cast < uint32_t >(pa);
-
-                    setVersion(uma, umi, mpa);
-                }
-            }
-        } catch (const std::exception& /*e*/) {
-            throw utils::InternalError(fmt(
-                    _("Can not convert version `%1%'")) % line);
-        }
     }
-
     void setVersion(uint32_t major, uint32_t minor, uint32_t patch)
     {
         mVersionMajor = major;
@@ -252,13 +469,60 @@ public:
         mVersionPatch = patch;
     }
 
-    void depends(std::vector < std::string >* depends) const
+    void setSection(const std::string& name)
     {
-        depends->resize(mDepends.size());
+        std::string tmp = boost::algorithm::trim_copy(name);
+        mSection = tmp;
+    }
 
-        std::copy(mDepends.begin(),
-                  mDepends.end(),
-                  depends->begin());
+    void setMaintainer(const std::string& maintainer)
+    {
+        std::string tmp = boost::algorithm::trim_copy(maintainer);
+
+        if (tmp.empty()) {
+            throw utils::ArgError(fmt(_("RemotePackage: empty maintainer")));
+        } else {
+            mMaintainer = tmp;
+        }
+    }
+
+    void setHomepage(const std::string& name)
+    {
+        std::string tmp = boost::algorithm::trim_copy(name);
+        mHomepage = tmp;
+    }
+
+    void setUrl(const std::string& name)
+    {
+        std::string tmp = boost::algorithm::trim_copy(name);
+        mUrl = tmp;
+    }
+
+    void setBuildDepends(const std::string& line)
+    {
+        std::vector < std::string > depends;
+
+        boost::algorithm::split(depends, line,
+                                boost::algorithm::is_any_of(","),
+                                boost::algorithm::token_compress_on);
+
+        setBuildDepends(depends);
+    }
+
+    void setBuildDepends(const std::vector < std::string >& depends)
+    {
+        typedef std::vector < std::string >::const_iterator iterator;
+
+        mBuildDepends.clear();
+
+        for (iterator it = depends.begin(); it != depends.end(); ++it) {
+            std::string str = boost::algorithm::trim_copy(*it);
+            if (not str.empty()) {
+                PackageDepend pkgdep;
+                pkgdep.fill(str);
+                mBuildDepends.push_back(pkgdep);
+            }
+        }
     }
 
     void setDepends(const std::string& line)
@@ -275,25 +539,40 @@ public:
     void setDepends(const std::vector < std::string >& depends)
     {
         typedef std::vector < std::string >::const_iterator iterator;
-
         mDepends.clear();
-
         for (iterator it = depends.begin(); it != depends.end(); ++it) {
             std::string str = boost::algorithm::trim_copy(*it);
             if (not str.empty()) {
-                mDepends.push_back(str);
+                PackageDepend pkgdep;
+                pkgdep.fill(str);
+                mDepends.push_back(pkgdep);
             }
         }
     }
 
-    void setMaintainer(const std::string& maintainer)
+    void setConflicts(const std::string& line)
     {
-        std::string tmp = boost::algorithm::trim_copy(maintainer);
+        std::vector < std::string > depends;
 
-        if (tmp.empty()) {
-            throw utils::ArgError(fmt(_("RemotePackage: empty maintainer")));
-        } else {
-            mMaintainer = tmp;
+        boost::algorithm::split(depends, line,
+                                boost::algorithm::is_any_of(","),
+                                boost::algorithm::token_compress_on);
+
+        setConflicts(depends);
+    }
+
+    void setConflicts(const std::vector < std::string >& depends)
+    {
+        typedef std::vector < std::string >::const_iterator iterator;
+        mConflicts.clear();
+        for (iterator it = depends.begin(); it != depends.end(); ++it) {
+            std::string str = boost::algorithm::trim_copy(*it);
+            if (not str.empty()) {
+                PackageDepend pkgdep;
+                pkgdep.fill(str);
+
+                mConflicts.push_back(pkgdep);
+            }
         }
     }
 
@@ -315,111 +594,38 @@ public:
         mDescription.append(tmp);
     }
 
-    void tags(std::vector < std::string >* tags) const
-    {
-        tags->resize(mTags.size());
-
-        std::copy(mTags.begin(),
-                  mTags.end(),
-                  tags->begin());
-    }
-
-    void setTags(const std::string& line)
-    {
-        std::vector < std::string > tags;
-
-        boost::algorithm::split(tags, line,
-                                boost::algorithm::is_any_of(","),
-                                boost::algorithm::token_compress_on);
-
-        setTags(tags);
-    }
-
-    void setTags(const std::vector < std::string >& tags)
-    {
-        typedef std::vector < std::string >::const_iterator iterator;
-
-        mTags.clear();
-
-        for (iterator it = tags.begin(); it != tags.end(); ++it) {
-            std::string str = boost::algorithm::trim_copy(*it);
-            if (not str.empty()) {
-                mTags.push_back(str);
-            }
-        }
-    }
-
-    void setUrl(const std::string& url)
-    {
-        std::string tmp = boost::algorithm::trim_copy(url);
-
-        if (tmp.empty()) {
-            throw utils::ArgError(fmt(_("RemotePackage: empty url")));
-        } else {
-            mUrl = tmp;
-        }
-    }
-
-    void setSize(const std::string& size)
-    {
-        using boost::lexical_cast;
-        using boost::numeric_cast;
-
-        try {
-            long lsize = boost::lexical_cast < long >(size);
-            setSize(numeric_cast < uint32_t >(lsize));
-        } catch (const std::exception& /*e*/) {
-            throw utils::InternalError(fmt(
-                    _("Can not convert size `%1%'")) % size);
-        }
-    }
-
-    void setSize(uint32_t size)
-    {
-        mSize = size;
-    }
-
-    void setMD5sum(const std::string& md5sum)
-    {
-        std::string tmp = boost::algorithm::trim_copy(md5sum);
-
-        if (tmp.empty()) {
-            throw utils::ArgError(fmt(_("RemotePackage: empty md5sum")));
-        } else {
-            mMD5sum = tmp;
-        }
-    }
-
     std::string getSourcePackageUrl() const
     {
-        return (fmt("%1%/%2%-%3%.%4%.%5%.zip") %
-                mUrl % mName % mVersionMajor % mVersionMinor %
-                mVersionPatch).str();
+        return (fmt("%1%/%2%-%3%.%4%.zip") %
+                mUrl % mSource % mVersionMajor % mVersionMinor).str();
     }
 
     std::string getBinaryPackageUrl() const
     {
         return (fmt("%1%/%2%-%3%.%4%.%5%-%6%-%7%.zip") %
-                mUrl % mName % mVersionMajor % mVersionMinor %
+                mUrl % mSource % mVersionMajor % mVersionMinor %
                 mVersionPatch % VLE_SYSTEM_NAME % VLE_SYSTEM_PROCESSOR).str();
     }
 
-    std::string mName;
-    std::string mMaintainer;
-    std::string mDescription;
-    std::string mUrl;
-    std::string mMD5sum;
-    std::vector < std::string > mTags;
-    std::vector < std::string > mDepends;
+    std::string mSource;
     uint32_t mVersionMajor;
     uint32_t mVersionMinor;
     uint32_t mVersionPatch;
-    uint32_t mSize;
+    uint32_t mVersionRepository;
+    std::string mSection;
+    std::string mMaintainer;
+    std::string mHomepage;
+    std::string mUrl;
+    std::vector<PackageDepend> mBuildDepends;
+    std::vector<PackageDepend> mDepends;
+    std::vector<PackageDepend> mConflicts;
+    std::string mDescription;
+
 };
 
 bool operator==(const RemotePackage& a, const RemotePackage& b)
 {
-    return a.mName == b.mName
+    return a.mSource == b.mSource
         and a.mVersionMajor == b.mVersionMajor
         and a.mVersionMinor == b.mVersionMinor
         and a.mVersionPatch == b.mVersionPatch;
@@ -427,7 +633,7 @@ bool operator==(const RemotePackage& a, const RemotePackage& b)
 
 bool operator<(const RemotePackage& a, const RemotePackage& b)
 {
-    if (a.mName == b.mName) {
+    if (a.mSource == b.mSource) {
         if (a.mVersionMajor == b.mVersionMajor) {
             if (a.mVersionMinor == b.mVersionMinor) {
                 if (a.mVersionPatch == b.mVersionPatch) {
@@ -442,26 +648,27 @@ bool operator<(const RemotePackage& a, const RemotePackage& b)
             return a.mVersionMajor < b.mVersionMajor;
         }
     } else {
-        return a.mName < b.mName;
+        return a.mSource < b.mSource;
     }
 }
 
 std::ostream& operator<<(std::ostream& os, const RemotePackage& b)
 {
-    using boost::algorithm::join;
 
     return os
-        << "Package: " <<  b.mName << "\n"
+        << "Source: " <<  b.mSource << "\n"
         << "Version: " << b.mVersionMajor
         << "." << b.mVersionMinor
-        << "." << b.mVersionPatch << "\n"
-        << "Depends: " << join(b.mDepends, ",") << "\n"
-        << "Maintainer: " << b.mMaintainer << "\n"
-        << "Description: " << b.mDescription << "\n" << " ." << "\n"
-        << "Tags: " << join(b.mTags, ", ") << "\n"
-        << "Filename: " << b.mName << "\n"
-        << "Size: " << b.mSize << "\n"
-        << "MD5sum: " << b.mMD5sum << "\n";
+        << "." << b.mVersionPatch
+        << "-" << b.mVersionRepository << "\n"
+        << "Section: " <<  b.mSection << "\n"
+        << "Maintainer: " <<  b.mMaintainer << "\n"
+        << "Homepage: " <<  b.mHomepage << "\n"
+        << "Url: " <<  b.mUrl << "\n"
+        << "Build-Depends: " << b.mBuildDepends << "\n"
+        << "Depends: " << b.mDepends << "\n"
+        << "Conflicts: " << b.mConflicts << "\n"
+        << "Description: " << b.mDescription << "\n" << " ." << "\n";
 }
 
 class RemoteManager::Pimpl
@@ -475,10 +682,7 @@ public:
         : mStream(0), mIsStarted(false), mIsFinish(false), mStop(false),
         mHasError(false)
     {
-        try {
-            read(buildPackageFilename());
-        } catch (...) {
-        }
+        read(buildPackageFilename(),"");
     }
 
     ~Pimpl()
@@ -603,21 +807,24 @@ private:
      * Read the package file \c filename.
      *
      * @param[in] The filename to read.
+     * @param[in] The url the package file comes from.
      */
-    void read(const std::string& filename)
+    void read(const std::string& filename,
+            const std::string& url)
     {
         std::ifstream file(filename.c_str());
-
         if (file) {
             file.exceptions(std::ios_base::eofbit | std::ios_base::failbit |
                             std::ios_base::badbit);
 
-            while (not file) {
-                RemotePackage pkg(file);
-
-                mPackages.insert(
-                    std::make_pair < std::string, RemotePackage >(
-                        pkg.mName, pkg));
+            while (not file.eof()) {
+                RemotePackage pkg(file, url);
+                if (not file.eof()) {
+                    std::cout << " DBG " << pkg.mSource << std::endl;
+                    mPackages.insert(
+                            std::make_pair < std::string, RemotePackage >(
+                                    pkg.mSource, pkg));
+                }
 
             }
         } else {
@@ -639,7 +846,7 @@ private:
             try {
                 std::transform(
                     mPackages.begin(), mPackages.end(),
-                    std::ostream_iterator < RemotePackage >( file, "\n"),
+                    std::ostream_iterator < RemotePackage >( file, ""),
                     select2nd < Pkgs::value_type >());
             } catch (const std::exception& /*e*/) {
                 TraceAlways(fmt(_("Failed to write package file `%1%'")) %
@@ -679,12 +886,13 @@ private:
                 DownloadManager dl;
 
                 std::string url = *it;
-                url += '/';
-                url += "packages";
+                std::string urlfile(url);
+                urlfile += '/';
+                urlfile += "packages";
 
-                out(fmt(_("Download %1% ...")) % url);
+                out(fmt(_("Download %1% ...")) % urlfile);
 
-                dl.start(url);
+                dl.start(urlfile);
                 dl.join();
 
                 if (not dl.hasError()) {
@@ -693,7 +901,7 @@ private:
 
                     try {
                         out(_("(merged: "));
-                        read(filename);
+                        read(filename, url);
                         out(_("ok)"));
                     } catch (...) {
                         out(_("failed)"));
@@ -758,6 +966,9 @@ private:
 
     void actionSource() throw()
     {
+
+
+
         const_iterator it = mPackages.find(mArgs);
 
         if (it != mPackages.end()) {
