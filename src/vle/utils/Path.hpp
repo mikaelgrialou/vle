@@ -32,6 +32,8 @@
 #include <vector>
 #include <iosfwd>
 #include <vle/DllDefines.hpp>
+#include <vle/utils/Trace.hpp>
+
 
 namespace vle { namespace utils {
 
@@ -287,7 +289,9 @@ public:
      * @return A reference to the singleton object.
      */
     inline static Path& path()
-    { if (mPath == 0) mPath = new Path; return *mPath; }
+    {
+        TraceAlways(" Path::path() ")
+        if (mPath == 0) mPath = new Path; return *mPath; }
 
     /**
      * Initialize the Path singleton.
@@ -587,7 +591,7 @@ private:
      * paths from prefix or vle user dir.
      */
     void initPackagePluginDirs();
-
+public:
     static Path* mPath; /**< The static variable Path for singleton
                            design pattern. */
 };

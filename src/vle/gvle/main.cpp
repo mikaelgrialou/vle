@@ -124,6 +124,20 @@ int main(int argc, char **argv)
     bool end = false;
     bool result = true;
 
+    vle::utils::Trace::setLogFile(
+        vle::utils::Trace::getLogFilename("gvle.log"));
+    vle::utils::Trace::setLevel(
+        vle::utils::Trace::cast(0));
+
+    std::string messs;
+
+    if(vle::utils::Path::mPath == 0){
+        messs.assign(" Null ");
+    } else {
+        messs.assign(" Not null ");
+    }
+    TraceAlways(vle::fmt(" mPath null ? %1% ") % messs)
+
     vle::Init app;
 
     Gtk::Main application(&argc, &argv);
@@ -147,10 +161,10 @@ int main(int argc, char **argv)
         vle::gvle::GVLE* g = 0;
 	Glib::RefPtr< Gtk::Builder > refBuilder = Gtk::Builder::create();
 	try {
-            vle::utils::Trace::setLogFile(
-                vle::utils::Trace::getLogFilename("gvle.log"));
-            vle::utils::Trace::setLevel(
-                vle::utils::Trace::cast(verbose));
+//            vle::utils::Trace::setLogFile(
+//                vle::utils::Trace::getLogFilename("gvle.log"));
+//            vle::utils::Trace::setLevel(
+//                vle::utils::Trace::cast(verbose));
 
 	    refBuilder->add_from_file(vle::utils::Path::path().
                                       getGladeFile("gvle.glade").c_str());

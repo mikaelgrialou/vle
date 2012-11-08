@@ -331,6 +331,8 @@ int main(int argc, char* argv[])
 {
     using namespace vle;
 
+    std::cout << " mPath null ? " << (vle::utils::Path::mPath == 0) << std::endl;
+
     vle::Init app;
 
     Glib::OptionContext context;

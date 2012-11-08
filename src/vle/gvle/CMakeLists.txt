@@ -53,14 +53,16 @@ if (BUILD_SHARED_LIBS)
   # if (WIN32)
   #   target_link_libraries(gvle vlelib)
   # else ()
+    MESSAGE(" build shared ")
     target_link_libraries(gvle ${VLEDEPS_LIBRARIES}
       ${OS_SPECIFIC_LIBRARIES} ${Boost_LIBRARIES} vlelib)
   # endif ()
 else ()
   if (WIN32)
+    MESSAGE(" set target properties ")
     set_target_properties(gvle PROPERTIES LINK_FLAGS "-Wl,-static")
   endif ()
-
+    MESSAGE(" build static ")
   # target_link_libraries(gvle ${VLEDEPS_STATIC_LIBRARIES}
   #   ${OS_SPECIFIC_LIBRARIES} ${Boost_LIBRARIES} vlelib-static)
 
