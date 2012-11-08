@@ -11,6 +11,11 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # See the License for more information.
 #
+# Environment variable used by this module
+#
+#  VLE_BASEPATH  - An optionnal environment variable which indicates the
+#                  root path of the installation of VLE
+#
 # Once done this will define
 #
 #  VLE_FOUND - system has VLE
@@ -44,22 +49,22 @@ endif ()
 if (NOT VLE_LIBRARIES)
   find_library(VLE_LIBRARIES
     NAMES vle-1.1 libvle-1.1
-    HINTS $ENV{HOME}/usr $ENV{VLE_BASEPATH} 
+    HINTS $ENV{HOME}/usr $ENV{VLE_BASEPATH}
     PATH_SUFFIXES lib lib64
-    PATHS 
+    PATHS
     /usr
-    /usr/local 
+    /usr/local
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0\\;Path]/lib")
 endif ()
 
 if (NOT VLE_STATIC_LIBRARIES)
   find_library(VLE_STATIC_LIBRARIES
     NAMES vle-1.1.a libvle-1.1.a
-    HINTS $ENV{HOME}/usr $ENV{VLE_BASEPATH} 
+    HINTS $ENV{HOME}/usr $ENV{VLE_BASEPATH}
     PATH_SUFFIXES lib lib64
-    PATHS 
+    PATHS
     /usr
-    /usr/local 
+    /usr/local
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0\\;Path]/lib")
 endif ()
 
