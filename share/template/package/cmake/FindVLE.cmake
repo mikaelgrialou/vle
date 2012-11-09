@@ -43,7 +43,9 @@ if (NOT VLE_INCLUDE_DIR)
     $ENV{HOME}/usr/include
     $ENV{VLE_BASEPATH}/include
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0;Path]/include"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0]/include"
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0;Path]/include"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0]/include"
     PATH_SUFFIXES vle-1.1)
 endif ()
 
@@ -56,7 +58,9 @@ if (NOT VLE_LIBRARIES)
     /usr
     /usr/local
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0\\;Path]/lib"
-    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0\\;Path]/lib")
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0]/lib"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0\\;Path]/lib"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0]/lib")
 endif ()
 
 if (NOT VLE_STATIC_LIBRARIES)
@@ -68,7 +72,9 @@ if (NOT VLE_STATIC_LIBRARIES)
     /usr
     /usr/local
     "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0\\;Path]/lib"
-    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0\\;Path]/lib")
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\VLE Development Team\\VLE 1.1.0]/lib"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0\\;Path]/lib"
+    "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\VLE Development Team\\VLE 1.1.0]/lib")
 endif ()
 
 if (NOT VLE_STATIC_LIBRARIES OR NOT VLE_LIBRARIES OR NOT VLE_INCLUDE_DIR)

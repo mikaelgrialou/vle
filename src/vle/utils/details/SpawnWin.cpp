@@ -150,13 +150,16 @@ static Envp prepareEnvironmentVariable()
 
     envp.push_back(replaceEnvironmentVariable(
                        "BOOST_INCLUDEDIR",
-                       Path::buildFilename(Path::path().getPrefixDir(),
-                                           "include", "boost"),
+                       Path::buildFilename(
+                               Path::path().getPrefixDir(),
+                               "include"),
                        false));
 
     envp.push_back(replaceEnvironmentVariable(
                        "BOOST_LIBRARYDIR",
-                       Path::buildFilename(Path::path().getPrefixDir(), "lib"),
+                       Path::buildFilename(
+                               Path::path().getPrefixDir(),
+                               "lib"),
                        false));
 
     envp.push_back(replaceEnvironmentVariable(
