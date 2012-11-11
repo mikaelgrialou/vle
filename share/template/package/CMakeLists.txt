@@ -23,6 +23,8 @@ INCLUDE(CMakeDetermineCCompiler)
 ## Check libraries with pkgconfig
 ##
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+SET(VLE_ABI_VERSION 1.1)
 FIND_PACKAGE(VLE REQUIRED)
 
 
@@ -51,10 +53,10 @@ FIND_PACKAGE(VleCheckAndDeclareGeneratedModels REQUIRED)
   #message(SEND_ERROR "Missing vle.extension.decision")
 #endif (NOT DECISION_FOUND)
 #if (NOT DIFFERENCE_EQU_FOUND)
-  #message(SEND_ERROR "Missing vle.extension.differential-equation")
+  #message(SEND_ERROR "Missing vle.extension.difference-equation")
 #endif (NOT DIFFERENCE_EQU_FOUND)
 #if (NOT DIFFERENTIAL_EQU_FOUND)
-  #message(SEND_ERROR "Missing vle.extension.difference-equation")
+  #message(SEND_ERROR "Missing vle.extension.differential-equation")
 #endif (NOT DIFFERENTIAL_EQU_FOUND)
 #if (NOT DSDEVS_FOUND)
   #message(SEND_ERROR "Missing vle.extension.dsdevs")
@@ -70,7 +72,7 @@ FIND_PACKAGE(VleCheckAndDeclareGeneratedModels REQUIRED)
 ## Find boost
 ##
 
-SET(Boost_USE_STATIC_LIBS OFF)
+SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREAD ON)
 FIND_PACKAGE(Boost COMPONENTS unit_test_framework date_time)
 
