@@ -33,7 +33,7 @@ namespace vle {
 namespace gvle {
 
 TupleBox::TupleBox(value::Tuple* t) :
-    Gtk::Dialog("Tuple", true, true),
+    Gtk::Dialog("Tuple", true),
     mValue(t)
 {
     add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
@@ -53,7 +53,8 @@ TupleBox::TupleBox(value::Tuple* t) :
 
 TupleBox::~TupleBox()
 {
-    hide_all();
+    // No hide_all in GTK 3
+    hide();
 }
 
 void TupleBox::run()

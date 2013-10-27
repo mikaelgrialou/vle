@@ -37,7 +37,7 @@ namespace vle {
 namespace gvle {
 
 TableBox::TableBox(value::Table* t) :
-    Gtk::Dialog("Table", true, true),
+    Gtk::Dialog("Table", true),
     mValue(t)
 {
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -57,7 +57,8 @@ TableBox::TableBox(value::Table* t) :
 
 TableBox::~TableBox()
 {
-    hide_all();
+    // No hide_all in Gtk 3
+    hide();
     delete mScroll;
     delete mTable;
 

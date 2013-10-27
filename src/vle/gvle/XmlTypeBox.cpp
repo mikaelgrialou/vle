@@ -34,7 +34,7 @@ namespace vle {
 namespace gvle {
 
 XmlTypeBox::XmlTypeBox(value::Xml* xml) :
-    Gtk::Dialog("XML", true, true),
+    Gtk::Dialog("XML", true),
     mValue(xml)
 {
     makeBox();
@@ -45,7 +45,7 @@ XmlTypeBox::XmlTypeBox(value::Xml* xml) :
 }
 
 XmlTypeBox::XmlTypeBox(std::string& string) :
-    Gtk::Dialog("XML", true, true),
+    Gtk::Dialog("XML", true),
     mValue(0),
     mXml(&string)
 {
@@ -58,7 +58,8 @@ XmlTypeBox::XmlTypeBox(std::string& string) :
 
 XmlTypeBox::~XmlTypeBox()
 {
-    hide_all();
+    // No hide_all in GTK 3
+    hide();
     delete mView;
 }
 

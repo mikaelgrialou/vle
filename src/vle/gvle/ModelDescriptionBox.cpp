@@ -41,7 +41,7 @@ namespace gvle {
 
 ModelDescriptionBox::ModelDescriptionBox(const set < string > & lst,
         vpz::BaseModel * model) :
-        Gtk::Dialog(_("Model Description"), true, true),
+        Gtk::Dialog(_("Model Description"), true),
         m_lst(lst),
         m_model(model)
 {
@@ -64,7 +64,7 @@ ModelDescriptionBox::ModelDescriptionBox(const set < string > & lst,
     get_vbox()->set_homogeneous(false);
     get_vbox()->set_spacing(0);
 
-    okbutton->set_flags(Gtk::CAN_DEFAULT);
+    okbutton->set_can_default (true);
     okbutton->grab_default();
     m_entry->set_activates_default();
 

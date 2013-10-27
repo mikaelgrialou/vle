@@ -733,9 +733,9 @@ void GVLE::onOpenVpz()
 
         file.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
         file.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-        Gtk::FileFilter filter;
-        filter.set_name(_("Vle Project gZipped"));
-        filter.add_pattern("*.vpz");
+        Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create ();
+        filter->set_name(_("Vle Project gZipped"));
+        filter->add_pattern("*.vpz");
         file.add_filter(filter);
         std::string expDir = currentPackage().getExpDir(vle::utils::PKG_SOURCE);
         file.set_current_folder(expDir);
@@ -874,9 +874,9 @@ void GVLE::onSaveAs()
         file.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
         if (isVPZ) {
-            Gtk::FileFilter filter;
-            filter.set_name(_("Vle Project gZipped"));
-            filter.add_pattern("*.vpz");
+            Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create ();
+            filter->set_name(_("Vle Project gZipped"));
+            filter->add_pattern("*.vpz");
             file.add_filter(filter);
         }
 
@@ -1150,9 +1150,9 @@ void GVLE::saveFirstVpz()
         file.set_transient_for(*this);
         file.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
         file.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-        Gtk::FileFilter filter;
-        filter.set_name(_("Vle Project gZipped"));
-        filter.add_pattern("*.vpz");
+        Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create ();
+        filter->set_name(_("Vle Project gZipped"));
+        filter->add_pattern("*.vpz");
         file.add_filter(filter);
 
         if (file.run() == Gtk::RESPONSE_OK) {
@@ -1916,9 +1916,9 @@ void GVLE::importModel()
     Gtk::FileChooserDialog file(_("VPZ file"), Gtk::FILE_CHOOSER_ACTION_OPEN);
     file.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     file.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-    Gtk::FileFilter filter;
-    filter.set_name(_("Vle Project gZipped"));
-    filter.add_pattern("*.vpz");
+    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create ();
+    filter->set_name(_("Vle Project gZipped"));
+    filter->add_pattern("*.vpz");
     file.add_filter(filter);
 
     int response = file.run();
@@ -2001,18 +2001,18 @@ void GVLE::exportGraphic()
     file.set_transient_for(*this);
     file.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     file.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-    Gtk::FileFilter filterAuto;
-    Gtk::FileFilter filterPng;
-    Gtk::FileFilter filterPdf;
-    Gtk::FileFilter filterSvg;
-    filterAuto.set_name(_("Guess type from file name"));
-    filterAuto.add_pattern("*");
-    filterPng.set_name(_("Portable Newtork Graphics (.png)"));
-    filterPng.add_pattern("*.png");
-    filterPdf.set_name(_("Portable Format Document (.pdf)"));
-    filterPdf.add_pattern("*.pdf");
-    filterSvg.set_name(_("Scalable Vector Graphics (.svg)"));
-    filterSvg.add_pattern("*.svg");
+    Glib::RefPtr<Gtk::FileFilter> filterAuto = Gtk::FileFilter::create ();
+    Glib::RefPtr<Gtk::FileFilter> filterPng = Gtk::FileFilter::create ();
+    Glib::RefPtr<Gtk::FileFilter> filterPdf = Gtk::FileFilter::create ();
+    Glib::RefPtr<Gtk::FileFilter> filterSvg = Gtk::FileFilter::create ();
+    filterAuto->set_name(_("Guess type from file name"));
+    filterAuto->add_pattern("*");
+    filterPng->set_name(_("Portable Newtork Graphics (.png)"));
+    filterPng->add_pattern("*.png");
+    filterPdf->set_name(_("Portable Format Document (.pdf)"));
+    filterPdf->add_pattern("*.pdf");
+    filterSvg->set_name(_("Scalable Vector Graphics (.svg)"));
+    filterSvg->add_pattern("*.svg");
     file.add_filter(filterAuto);
     file.add_filter(filterPng);
     file.add_filter(filterPdf);

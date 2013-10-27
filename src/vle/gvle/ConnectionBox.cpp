@@ -40,7 +40,7 @@ namespace vle { namespace gvle {
 ConnectionBox::ConnectionBox(vpz::CoupledModel* parent,
                              vpz::BaseModel* src,
                              vpz::BaseModel* dst) :
-        Gtk::Dialog(_("Connection Box"), true, true),
+        Gtk::Dialog(_("Connection Box"), true),
         m_vbox(false),
         m_hbox(true),
         m_left(_("Source model")),
