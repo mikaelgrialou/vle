@@ -189,7 +189,6 @@ class ConditionsBox
 	
 	Glib::RefPtr <Gtk::UIManager> mUIManager;
         Glib::RefPtr <Gtk::ActionGroup> mPopupActionGroup;
-        Glib::RefPtr <Gtk::ActionGroup> mEditActionGroup;
     };
 
 public:

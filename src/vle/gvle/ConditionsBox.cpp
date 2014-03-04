@@ -399,9 +399,8 @@ void ConditionsBox::PortsTreeView::makeMenus () {
     
     mPopupActionGroup->add(Gtk::Action::create("PTV_ContextEdit", _("_Edit")));
     for (it = lst.begin(); it != lst.end(); ++it) {
-        name_item ="PTV_Edit_" + it->package + "_" + it->library; 
-        
-        mEditActionGroup->add(Gtk::Action::create(name_item, it->package + "/" + it->library),
+        name_item ="PTV_Edit_" + it->package + "_" + it->library;
+        mPopupActionGroup->add(Gtk::Action::create(name_item, it->package + "/" + it->library),
             sigc::bind<std::string>(sigc::mem_fun(
                     *this, &ConditionsBox::PortsTreeView::onEdit),
                     it->package + "/" + it->library));

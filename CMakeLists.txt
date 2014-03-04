@@ -85,7 +85,7 @@ option(WITH_GTKSOURCEVIEW "use gtksourceview to build gvle [default: on]" ON)
 
 if (WITH_GTK AND WITH_GTKSOURCEVIEW)
   pkg_check_modules(VLEDEPS libarchive glibmm-2.4 gthread-2.0 libxml-2.0
-    gtkmm-3.0 gtksourceview-3.0)
+    gtkmm-3.0 gtksourceview-3.0 cairomm-1.0)
 
   if (NOT VLEDEPS_FOUND)
     message(STATUS "Failed to find gtksourceview-3.0")
