@@ -949,10 +949,10 @@ bool GVLE::closeTab(const std::string& filepath)
             gvle::Question(_("The current tab is not saved\n"
                              "Do you really want to close this file ?"))) {
             if (it->second->isDrawingArea()) {
+                clearModelTreeBox();
                 mEditor->closeVpzTab();
                 mModeling->clearModeling();
                 setTitle(mModeling->getFileName());
-                clearModelTreeBox();
                 clearModelClassBox();
                 mModelTreeBox->set_sensitive(false);
                 mModelClassBox->set_sensitive(false);
@@ -989,10 +989,10 @@ void GVLE::onCloseTab()
             gvle::Question(_("The current tab is not saved\n"
                              "Do you really want to close this file ?"))) {
             if (it->second->isDrawingArea()) {
+                clearModelTreeBox();
                 mModeling->clearModeling();
                 getEditor()->closeVpzTab();
                 setTitle(mModeling->getFileName());
-                clearModelTreeBox();
                 clearModelClassBox();
                 mModelTreeBox->set_sensitive(false);
                 mModelClassBox->set_sensitive(false);
@@ -1008,10 +1008,10 @@ void GVLE::onCloseTab()
 
 void GVLE::onCloseProject()
 {
+    clearModelTreeBox();
     mEditor->closeAllTab();
     mModeling->clearModeling();
     setTitle(mModeling->getFileName());
-    clearModelTreeBox();
     clearModelClassBox();
     mModelTreeBox->set_sensitive(false);
     mModelClassBox->set_sensitive(false);
