@@ -87,7 +87,7 @@ InteractiveTypeBox::~InteractiveTypeBox()
 
 void InteractiveTypeBox::makeDialog()
 {
-    mHBox = new Gtk::HBox();
+    mHBox = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
     mEntry = new Gtk::Entry();
     mEntry->set_editable(true);
     mEntry->set_activates_default(true);

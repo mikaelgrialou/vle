@@ -572,10 +572,11 @@ void Editor::onCloseTab(const std::string& filepath)
     mGVLE->closeTab(filepath);
 }
 
-Gtk::HBox* Editor::addLabel(const std::string& title,
+Gtk::Box* Editor::addLabel(const std::string& title,
                             const std::string& filepath)
 {
-    Gtk::HBox* tabLabel = new Gtk::HBox(false, 0);
+    Gtk::Box* tabLabel = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0);
+    tabLabel->set_homogeneous (false);
     Gtk::Label* label = new Gtk::Label(title);
 
     tabLabel->pack_start(*label, true, true, 0);

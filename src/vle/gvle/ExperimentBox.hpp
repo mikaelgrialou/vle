@@ -81,7 +81,7 @@ namespace vle { namespace gvle {
         Gtk::SpinButton*    mSpinBeginS;
         double              mBeginRealMin, mBeginRealMax;
         bool                mRealUpdated;
-        Gtk::HBox*          mHboxCombi;
+        Gtk::Box*          mHboxCombi;
 	Gtk::RadioButton*   mRadioButtonLinear;
 	Gtk::RadioButton*   mRadioButtonTotal;
 

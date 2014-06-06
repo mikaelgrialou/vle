@@ -31,7 +31,7 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/scrolledwindow.h>
 //#include <gtkmm/tooltip.h>
-#include <gtkmm/table.h>
+#include <gtkmm/grid.h>
 #include <vle/value/Matrix.hpp>
 #include <vle/value/Table.hpp>
 #include <boost/multi_array.hpp>
@@ -51,7 +51,7 @@ private:
     typedef boost::multi_array< std::pair<Gtk::Button*, Gtk::Object*>, 2 > array_type;
 
     Gtk::ScrolledWindow* mScroll;
-    Gtk::Table* mTable;
+    Gtk::Grid* mTable;
     array_type* mArray;
 
     value::Matrix* mValue;

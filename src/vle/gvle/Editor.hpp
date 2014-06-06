@@ -329,7 +329,7 @@ private:
      *
      * @return a pointeur of the new label
      */
-    Gtk::HBox* addLabel(const std::string& title,
+    Gtk::Box* addLabel(const std::string& title,
                         const std::string& filepath);
 };
 

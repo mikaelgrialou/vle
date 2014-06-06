@@ -47,7 +47,8 @@ TableBox::TableBox(value::Table* t) :
     mScroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     get_vbox()->pack_start(*mScroll);
 
-    mTable = new Gtk::Table(t->height(), t->width(), true);
+    //mTable = new Gtk::Table(t->height(), t->width(), true);
+    mTable = new Gtk::Grid();
     mScroll->add(*mTable);
     makeTable();
     resize(300, 200);
@@ -101,9 +102,9 @@ void TableBox::makeTable()
                 j,
                 j + 1,
                 i,
-                i + 1,
+                i + 1 /*,
                 Gtk::FILL,
-                Gtk::FILL);
+                Gtk::FILL */);
         }
     }
 }

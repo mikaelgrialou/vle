@@ -522,7 +522,7 @@ void ViewOutputBox::storePrevious()
 
 void ViewOutputBox::fillCombobox()
 {
-    Gtk::HBox* box;
+    Gtk::Box* box;
     m_xml->get_widget(("comboboxTypeDialogViewOutput"), box);
     m_type = new Gtk::ComboBoxText();
     m_type->show_all();

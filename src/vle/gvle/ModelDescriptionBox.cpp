@@ -57,7 +57,8 @@ ModelDescriptionBox::ModelDescriptionBox(const set < string > & lst,
     frameNorth->set_shadow_type(Gtk::SHADOW_NONE);
     frameNorth->add(*m_entry);
 
-    Gtk::VBox *vbox1 = Gtk::manage(new class Gtk::VBox(false, 0));
+    Gtk::Box *vbox1 = Gtk::manage(new class Gtk::Box(Gtk::ORIENTATION_VERTICAL, 0));
+    vbox1->set_homogeneous (false);
     vbox1->pack_start(*frameNorth, Gtk::PACK_SHRINK, 0);
 
     get_vbox()->add(*vbox1);

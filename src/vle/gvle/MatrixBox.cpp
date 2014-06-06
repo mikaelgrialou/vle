@@ -53,7 +53,8 @@ MatrixBox::MatrixBox(value::Matrix* m) :
     mScroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     get_vbox()->pack_start(*mScroll);
 
-    mTable = new Gtk::Table(m->rows(), m->columns(), true);
+    //mTable = new Gtk::Table(m->rows(), m->columns(), true);
+    mTable = new Gtk::Grid();
     mScroll->add(*mTable);
     makeTable();
     resize(300, 200);
@@ -118,9 +119,9 @@ void MatrixBox::makeTable()
                            j,
                            j + 1,
                            i,
-                           i + 1,
+                           i + 1 /*,
                            Gtk::FILL,
-                           Gtk::FILL);
+                           Gtk::FILL */ );
             (*mArray)[j][i].first->signal_clicked().connect(
                 sigc::bind(
                     sigc::mem_fun(*this, &MatrixBox::on_click), i, j));

@@ -80,14 +80,17 @@ void XmlTypeBox::makeBox()
     add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
     add_button(Gtk::Stock::OK, Gtk::RESPONSE_APPLY);
 
-    mScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,
-        Gtk::POLICY_AUTOMATIC);
+//    mScrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC,
+//        Gtk::POLICY_AUTOMATIC);
 
     mView = new Gtk::TextView();
     mBuff = mView->get_buffer();
 
-    mScrolledWindow.add(*mView);
-    get_vbox()->pack_start(mScrolledWindow);
+//    mScrolledWindow.add(*mView);
+    mView->set_vscroll_policy(Gtk::SCROLL_NATURAL);
+    mView->set_hscroll_policy(Gtk::SCROLL_NATURAL);
+//    get_vbox()->pack_start(mScrolledWindow);
+    get_vbox()->pack_start(*mView);
 }
 
 }
