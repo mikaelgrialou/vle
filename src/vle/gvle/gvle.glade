@@ -627,10 +627,10 @@ Contributors
             <property name="column_spacing">10</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow6">
+                <property name="width_request">150</property>
+                <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
                 <property name="shadow_type">etched-out</property>
                 <child>
                   <object class="GtkTreeView" id="simuTreeConditions">
@@ -638,6 +638,8 @@ Contributors
                     <property name="height_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="rules_hint">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection6"/>
@@ -654,10 +656,10 @@ Contributors
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow4">
+                <property name="width_request">150</property>
+                <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="vscrollbar_policy">never</property>
                 <property name="shadow_type">etched-out</property>
                 <child>
                   <object class="GtkTreeView" id="simuTreePorts">
@@ -665,6 +667,8 @@ Contributors
                     <property name="height_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="rules_hint">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection7"/>
@@ -681,6 +685,8 @@ Contributors
             </child>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow5">
+                <property name="width_request">150</property>
+                <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
@@ -692,6 +698,8 @@ Contributors
                     <property name="height_request">250</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <property name="rules_hint">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection8"/>
@@ -932,6 +940,8 @@ Contributors
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow10">
+                                <property name="width_request">100</property>
+                                <property name="height_request">150</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <child>
@@ -940,6 +950,8 @@ Contributors
                                     <property name="height_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection9"/>
                                     </child>
@@ -969,6 +981,8 @@ Contributors
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow11">
+                                <property name="width_request">100</property>
+                                <property name="height_request">150</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <child>
@@ -977,6 +991,8 @@ Contributors
                                     <property name="height_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection10"/>
                                     </child>
@@ -1348,11 +1364,12 @@ Contributors
                       <object class="GtkScrolledWindow" id="scrolledwindow1b">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
                         <child>
                           <object class="GtkTreeView" id="treeviewDialogDynamics">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection11"/>
                             </child>
@@ -2568,6 +2585,8 @@ Contributors
                       <object class="GtkTreeView" id="treeviewHosts">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection12"/>
                         </child>
@@ -2769,6 +2788,8 @@ Contributors
                                 <property name="height_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <property name="rules_hint">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection13"/>
@@ -2818,6 +2839,8 @@ Contributors
                                 <property name="height_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <property name="rules_hint">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection14"/>
@@ -2963,6 +2986,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxModels">
                                 <property name="visible">True</property>
@@ -3017,6 +3042,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxViews">
                                 <property name="visible">True</property>
@@ -3071,6 +3098,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxObservables">
                                 <property name="visible">True</property>
@@ -3125,6 +3154,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxOutputs">
                                 <property name="visible">True</property>
@@ -3179,6 +3210,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxConditions">
                                 <property name="visible">True</property>
@@ -3233,6 +3266,8 @@ into your project.
                           <object class="GtkViewport" id="viewportI6">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkBox" id="ImportVboxDynamics">
                                 <property name="visible">True</property>
@@ -3344,6 +3379,8 @@ into your project.
               <object class="GtkTreeView" id="TreeViewModelingPlugin">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection15"/>
                 </child>
@@ -3733,17 +3770,17 @@ into your project.
                             <property name="resize_mode">queue</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindowObs">
-                                <property name="width_request">-1</property>
+                                <property name="height_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <property name="vscrollbar_policy">never</property>
                                 <property name="shadow_type">etched-out</property>
                                 <child>
                                   <object class="GtkTreeView" id="TreeViewObs">
                                     <property name="height_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
                                     <property name="rules_hint">True</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection16"/>
@@ -3834,16 +3871,17 @@ into your project.
                             <property name="resize_mode">queue</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindowViews">
+                                <property name="height_request">200</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hscrollbar_policy">never</property>
-                                <property name="vscrollbar_policy">never</property>
                                 <property name="shadow_type">etched-out</property>
                                 <child>
                                   <object class="GtkTreeView" id="TreeViewViews">
                                     <property name="height_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
                                     <property name="rules_hint">True</property>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection" id="treeview-selection17"/>
@@ -3959,6 +3997,8 @@ into your project.
               <object class="GtkTreeView" id="TreeViewPackage">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="rules_hint">True</property>
                 <property name="rubber_banding">True</property>
                 <child internal-child="selection">
@@ -4824,6 +4864,8 @@ into your project.
                   <object class="GtkTreeView" id="FileNotSavedTreeView">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="treeview-selection19"/>
                     </child>
@@ -4976,6 +5018,8 @@ into your project.
                               <object class="GtkTreeView" id="treeviewReplica">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection" id="treeview-selection20"/>
                                 </child>
@@ -5718,16 +5762,18 @@ the experimental frame</property>
                     <property name="right_padding">10</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindowDialogViewOutput">
+                        <property name="width_request">150</property>
+                        <property name="height_request">150</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">never</property>
                         <child>
                           <object class="GtkTreeView" id="treeviewDialogViewOutput">
                             <property name="width_request">150</property>
                             <property name="height_request">150</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
                             <property name="rules_hint">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection21"/>
@@ -6093,77 +6139,8 @@ the experimental frame</property>
       <action-widget response="-5">buttonOkDialogViewOutput</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkWindow" id="WindowModelClass">
-    <property name="can_focus">False</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <child>
-      <object class="GtkBox" id="vbox23">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
-        <child>
-          <object class="GtkTreeView" id="TreeViewModelClass">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <child internal-child="selection">
-              <object class="GtkTreeSelection" id="treeview-selection22"/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox35">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="spacing">10</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButtonBox" id="hbuttonbox1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
   <object class="GtkWindow" id="WindowPackageBrowser">
+    <property name="height_request">200</property>
     <property name="can_focus">False</property>
     <property name="default_width">600</property>
     <property name="default_height">350</property>
@@ -6179,8 +6156,10 @@ the experimental frame</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkBox" id="MenuAndToolbarVbox">
+                <property name="height_request">-1</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="resize_mode">queue</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <placeholder/>
@@ -6207,19 +6186,13 @@ the experimental frame</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">etched-out</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow1">
+                      <object class="GtkTreeView" id="FileTreeViewPackageBrowser">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <child>
-                          <object class="GtkTreeView" id="FileTreeViewPackageBrowser">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="rules_hint">True</property>
-                            <property name="rubber_banding">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection23"/>
-                            </child>
-                          </object>
+                        <property name="rules_hint">True</property>
+                        <property name="rubber_banding">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="treeview-selection23"/>
                         </child>
                       </object>
                     </child>
@@ -6278,17 +6251,11 @@ the experimental frame</property>
                             <property name="can_focus">True</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow9">
+                              <object class="GtkTreeView" id="TreeViewModel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <child>
-                                  <object class="GtkTreeView" id="TreeViewModel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection24"/>
-                                    </child>
-                                  </object>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection24"/>
                                 </child>
                               </object>
                               <packing>
@@ -6297,17 +6264,11 @@ the experimental frame</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolledwindow8">
+                              <object class="GtkTreeView" id="TreeViewClass">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <child>
-                                  <object class="GtkTreeView" id="TreeViewClass">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection" id="treeview-selection25"/>
-                                    </child>
-                                  </object>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection25"/>
                                 </child>
                               </object>
                               <packing>
@@ -6352,16 +6313,10 @@ the experimental frame</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow7">
+              <object class="GtkTextView" id="TextViewLogPackageBrowser">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <child>
-                  <object class="GtkTextView" id="TextViewLogPackageBrowser">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="editable">False</property>
-                  </object>
-                </child>
+                <property name="editable">False</property>
               </object>
               <packing>
                 <property name="expand">True</property>

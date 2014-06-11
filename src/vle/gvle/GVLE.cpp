@@ -127,8 +127,8 @@ GVLE::GVLE(BaseObjectType* cobject,
     mFileTreeView->set_sensitive(false);
 
     mMenuAndToolbar = new GVLEMenuAndToolbar(this);
-    mMenuAndToolbarVbox->pack_start(*mMenuAndToolbar->getMenuBar());
-    mMenuAndToolbarVbox->pack_start(*mMenuAndToolbar->getToolbar());
+    mMenuAndToolbarVbox->pack_start(*mMenuAndToolbar->getMenuBar(), Gtk::PACK_SHRINK);
+    mMenuAndToolbarVbox->pack_start(*mMenuAndToolbar->getToolbar(), Gtk::PACK_SHRINK);
     mMenuAndToolbar->getToolbar()->set_toolbar_style(Gtk::TOOLBAR_BOTH);
 
     if (mModeling->vpz().project().model().model() != 0) {
